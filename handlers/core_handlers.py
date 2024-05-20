@@ -1,26 +1,19 @@
-from telegram import Update
-from telegram.ext import CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import CommandHandler, MessageHandler, Filters
+from .set_language import set_language
+from .detect_language import detect_language
 from googletrans import Translator
 import logging
 
 translator = Translator()
 user_language = {}
 
-def start(update: Update, context: CallbackContext) -> None:
+def start(update, context) -> None:
     update.message.reply_text('¡Hola! Envíame cualquier mensaje y te lo traduciré al español.')
 
-def help_command(update: Update, context: CallbackContext) -> None:
+def help_command(update, context) -> None:
     update.message.reply_text('Envíame cualquier mensaje y te lo traduciré al español. Usa /setlang <código de idioma> para cambiar el idioma de destino.')
 
-def set_language(update: Update, context: CallbackContext) -> None:
-    user_id = update.message.from_user.id
-    if context.args:
-        user_language[user_id] = context.args[0]
-        update.message.reply_text(f'Idioma de destino cambiado a {context.args[0]}')
-    else:
-        update.message.reply_text('Uso: /setlang <código de idioma>')
-
-def handle_message(update: Update, context: CallbackContext) -> None:
+def handle_message(update, context) -> None:
     user_id = update.message.from_user.id
     text = update.message.text
     target_language = user_language.get(user_id, 'es')
