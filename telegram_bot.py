@@ -1,3 +1,4 @@
+import os
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from googletrans import Translator
@@ -32,7 +33,7 @@ def handle_message(update: Update, context: CallbackContext) -> None:
         target_language = user_language[user_id]
     else:
         target_language = 'es'
-
+    
     # Traduce el mensaje
     translated = translator.translate(text, dest=target_language).text
 
@@ -43,8 +44,13 @@ def handle_message(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(translated)
 
 def main() -> None:
-    # Reemplaza 'YOUR TOKEN HERE' con tu token del BotFather
-    updater = Updater("YOUR TOKEN HERE")
+    # Leer el token del bot desde las variables de entorno
+    token = os.getenv('TELEGRAM_TOKEN')
+    if not token:
+        logger.error("No se encontró el token de Telegram. Asegúrate de que la variable de entorno TELEGRAM_TOKEN está configurada.")
+        return
+
+    updater = Updater(token)
 
     dispatcher = updater.dispatcher
 
