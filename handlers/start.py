@@ -1,10 +1,10 @@
-import requests
 import os
+import requests
 from telegram import Update
 from telegram.ext import CallbackContext
 
-GITHUB_REPO = "username/repo"  # Reemplaza con tu usuario/repositorio
-GITHUB_TOKEN = os.getenv('GH_TOKEN')  # Obtener el token de las variables de entorno
+GITHUB_REPO = "username/repo"
+GITHUB_TOKEN = os.getenv('GH_TOKEN')
 
 def get_workflow_status():
     url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/runs"
@@ -22,7 +22,7 @@ def get_workflow_status():
 
 def trigger_github_action():
     if get_workflow_status():
-        return False  # Ya hay un workflow en ejecución
+        return False
 
     url = f"https://api.github.com/repos/{GITHUB_REPO}/dispatches"
     headers = {
@@ -37,6 +37,10 @@ def trigger_github_action():
     return response.status_code == 204
 
 def start(update: Update, context: CallbackContext) -> None:
+    if 'config' not in context.user_data:
+        update.message.reply_text("Please set your default input language with /setlang <language name> first.")
+        return
+    
     if trigger_github_action():
         update.message.reply_text("Bot started successfully!")
     else:

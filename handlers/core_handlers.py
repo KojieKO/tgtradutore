@@ -15,11 +15,11 @@ def handle_message(update, context) -> None:
     text = update.message.text
     user_config = context.user_data.get('config')
     if not user_config:
-        update.message.reply_text("Please set your default input language with /setlang <language code> first.")
+        update.message.reply_text("Please set your default input language with /setlang <language name> first.")
         return
 
-    input_language = user_config.get('input_language', 'es')
-    output_language = user_config.get('output_language', 'en')
+    input_language = user_config.get('input_language')
+    output_language = 'en'  # Default output language
 
     try:
         detected_lang = detect_language(text)
