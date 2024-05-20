@@ -1,8 +1,9 @@
 import os
 import logging
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 from config import TOKEN
 from handlers.inith import setup_handlers
+from handlers.menu_handlers import start, handle_menu, handle_language_settings
 
 # Habilita el registro
 logging.basicConfig(
@@ -35,6 +36,11 @@ def main() -> None:
 
         # Configura los manejadores
         setup_handlers(dispatcher)
+
+        # Añadir manejadores para menús y comandos
+        dispatcher.add_handler(CommandHandler("start", start))
+        dispatcher.add_handler(CallbackQueryHandler(handle_menu))
+        dispatcher.add_handler(CallbackQueryHandler(handle_language_settings, pattern='config_.*'))
 
         # Añadir manejador para detener el bot
         dispatcher.add_handler(CommandHandler("stop", lambda update, context: stop_bot(update, context, updater)))
