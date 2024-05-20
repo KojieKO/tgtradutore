@@ -1,14 +1,25 @@
 import os
 import logging
-from telegram.ext import Updater
+from telegram.ext import Updater, CommandHandler
 from config import TOKEN
 from handlers.inith import setup_handlers
 
 # Habilita el registro
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levellevel)s - %(message)s', level=logging.INFO
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+
+def start_bot(updater):
+    """Inicia el bot"""
+    updater.start_polling()
+    logger.info("Bot iniciado")
+
+def stop_bot(updater):
+    """Detiene el bot"""
+    updater.stop()
+    updater.is_idle = False
+    logger.info("Bot detenido")
 
 def main() -> None:
     logger.info("Iniciando el bot...")
@@ -24,7 +35,12 @@ def main() -> None:
         # Configura los manejadores
         setup_handlers(dispatcher)
 
-        updater.start_polling()
+        # Añadir manejador para detener el bot
+        dispatcher.add_handler(CommandHandler("stop", lambda update, context: stop_bot(updater)))
+
+        start_bot(updater)
+
+        # Corre el bot hasta que se presione Ctrl-C
         updater.idle()
     except Exception as e:
         logger.error(f"Error al iniciar el bot: {e}")
