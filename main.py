@@ -1,5 +1,7 @@
 import os
 import logging
+from telegram import Update
+from telegram.ext import CallbackContext
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 from config import TOKEN
 from handlers.inith import setup_handlers
@@ -10,6 +12,19 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+
+def start(update: Update, context: CallbackContext) -> None:
+    user_id = update.message.from_user.id
+    user_config = context.user_data.get('config')
+
+    if user_config is None:
+        update.message.reply_text(
+            "Hello! This bot will help you translate. Please set your default language with /setlang <language code>."
+        )
+    else:
+        update.message.reply_text(
+            f"Welcome back! Your default translation language is set to {user_config['language']}."
+        )
 
 def start_bot(updater):
     """Inicia el bot"""
