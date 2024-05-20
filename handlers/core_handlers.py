@@ -4,6 +4,7 @@ from .help import help_command
 from .set_language import set_language
 from .detect_language import detect_language
 from .menu_handlers import show_main_menu, handle_menu, handle_language_settings
+from .debug import debug_stop
 from googletrans import Translator
 import logging
 
@@ -35,4 +36,5 @@ def setup_handlers(dispatcher):
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("help", help_command))
     dispatcher.add_handler(CommandHandler("setlang", set_language))
+    dispatcher.add_handler(CommandHandler("debug_stop", debug_stop))
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))

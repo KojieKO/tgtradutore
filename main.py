@@ -1,6 +1,6 @@
 import os
 import logging
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater
 from config import TOKEN
 from handlers.core_handlers import setup_handlers
 
@@ -15,13 +15,6 @@ def start_bot(updater):
     updater.start_polling()
     logger.info("Bot iniciado")
 
-def stop_bot(update, context, updater):
-    """Detiene el bot"""
-    update.message.reply_text("Bot detenido. ¡Hasta luego!")
-    updater.stop()
-    updater.is_idle = False
-    logger.info("Bot detenido")
-
 def main() -> None:
     logger.info("Iniciando el bot...")
     token = TOKEN
@@ -35,9 +28,6 @@ def main() -> None:
 
         # Configura los manejadores
         setup_handlers(dispatcher)
-
-        # Añadir manejador para detener el bot
-        dispatcher.add_handler(CommandHandler("stop", lambda update, context: stop_bot(update, context, updater)))
 
         start_bot(updater)
 
