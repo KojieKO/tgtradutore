@@ -1,15 +1,6 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext
 
-def start(update: Update, context: CallbackContext) -> None:
-    user_config = context.user_data.get('config')
-    if user_config is None:
-        update.message.reply_text(
-            "Hello! This bot will help you translate. Please set your default input language with /setlang <language code>."
-        )
-    else:
-        show_main_menu(update, context)
-
 def show_main_menu(update: Update, context: CallbackContext) -> None:
     keyboard = [
         [InlineKeyboardButton("Iniciar", callback_data='start')],

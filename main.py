@@ -26,6 +26,9 @@ def main() -> None:
         updater = Updater(token)
         dispatcher = updater.dispatcher
 
+        # Almacenar el objeto updater en el contexto del bot
+        dispatcher.bot_data['updater'] = updater
+
         # Configura los manejadores
         setup_handlers(dispatcher)
 
