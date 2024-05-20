@@ -1,0 +1,29 @@
+import os
+import logging
+from telegram.ext import Updater
+from config import TOKEN
+from handlers import setup_handlers
+
+# Habilita el registro
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
+def main() -> None:
+    token = TOKEN
+    if not token:
+        logger.error("No se encontró el token de Telegram. Asegúrate de que la variable de entorno TELEGRAM_TOKEN está configurada.")
+        return
+
+    updater = Updater(token)
+    dispatcher = updater.dispatcher
+
+    # Configura los manejadores
+    setup_handlers(dispatcher)
+
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()

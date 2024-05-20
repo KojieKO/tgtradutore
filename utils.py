@@ -1,0 +1,1 @@
+#Este archivo está actualmente vacío, pero puede ser utilizado para agregar funciones auxiliares en el futuro.
