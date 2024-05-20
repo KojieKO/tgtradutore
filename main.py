@@ -6,7 +6,7 @@ from handlers.inith import setup_handlers
 
 # Habilita el registro
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
+    format='%(asctime)s - %(name)s - %(levellevel)s - %(message)s', level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
