@@ -1,5 +1,6 @@
 from telegram.ext import CommandHandler, MessageHandler, Filters
 from .start import start
+from .help import help_command
 from .set_language import set_language
 from .detect_language import detect_language
 from .menu_handlers import show_main_menu, handle_menu, handle_language_settings
