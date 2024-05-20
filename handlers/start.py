@@ -3,8 +3,8 @@ import requests
 from telegram import Update
 from telegram.ext import CallbackContext
 
-GITHUB_REPO = "username/repo"
-GITHUB_TOKEN = os.getenv('GH_TOKEN')
+GITHUB_REPO = "username/repo"  # Reemplaza con tu usuario/repositorio
+GITHUB_TOKEN = os.getenv('GH_TOKEN')  # Obtener el token de las variables de entorno
 
 def trigger_github_action():
     url = f"https://api.github.com/repos/{GITHUB_REPO}/dispatches"
