@@ -1,25 +1,30 @@
 from telegram.ext import CommandHandler, MessageHandler, Filters
+from .start import start
 from .set_language import set_language
 from .detect_language import detect_language
+from .menu_handlers import show_main_menu, handle_menu, handle_language_settings
 from googletrans import Translator
 import logging
 
 translator = Translator()
-user_language = {}
-
-def start(update, context) -> None:
-    update.message.reply_text('¡Hola! Envíame cualquier mensaje y te lo traduciré al español.')
-
-def help_command(update, context) -> None:
-    update.message.reply_text('Envíame cualquier mensaje y te lo traduciré al español. Usa /setlang <código de idioma> para cambiar el idioma de destino.')
 
 def handle_message(update, context) -> None:
     user_id = update.message.from_user.id
     text = update.message.text
-    target_language = user_language.get(user_id, 'es')
+    user_config = context.user_data.get('config')
+    if not user_config:
+        update.message.reply_text("Please set your default input language with /setlang <language code> first.")
+        return
+
+    input_language = user_config.get('input_language', 'es')
+    output_language = user_config.get('output_language', 'en')
 
     try:
-        translated = translator.translate(text, dest=target_language).text
+        detected_lang = detect_language(text)
+        if detected_lang == input_language:
+            translated = translator.translate(text, dest=output_language).text
+        else:
+            translated = translator.translate(text, dest=input_language).text
         update.message.reply_text(translated)
     except Exception as e:
         logging.error(f"Error al traducir el mensaje: {e}")
