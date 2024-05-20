@@ -46,3 +46,12 @@ def show_configure_menu(query):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(text="Configurar opciones:", reply_markup=reply_markup)
+
+def handle_language_settings(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    query.answer()
+
+    if query.data == 'config_input_language':
+        query.edit_message_text(text="Por favor, establece tu idioma de entrada con /setlang <código de idioma>.")
+    elif query.data == 'config_output_language':
+        query.edit_message_text(text="Por favor, establece tu idioma de salida con /setlang <código de idioma>.")
