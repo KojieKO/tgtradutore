@@ -23,6 +23,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Debug Info
+        run: |
+          python --version
+          pip --version
+          pip list
+
       - name: Run bot
         run: |
           python telegram_bot.py
