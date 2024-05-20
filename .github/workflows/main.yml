@@ -26,9 +26,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Debug Info
+        run: |
+          python --version
+          pip --version
+          pip list
+
       - name: Run bot
         run: |
           python main.py
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # Incluir el token de GitHub
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
