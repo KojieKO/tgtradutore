@@ -1,30 +1,14 @@
 import os
 import logging
-from telegram import Update
-from telegram.ext import CallbackContext
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from telegram.ext import Updater, CommandHandler
 from config import TOKEN
-from handlers.inith import setup_handlers
-from handlers.menu_handlers import start, handle_menu, handle_language_settings
+from handlers.core_handlers import setup_handlers
 
 # Habilita el registro
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
 logger = logging.getLogger(__name__)
-
-def start(update: Update, context: CallbackContext) -> None:
-    user_id = update.message.from_user.id
-    user_config = context.user_data.get('config')
-
-    if user_config is None:
-        update.message.reply_text(
-            "Hello! This bot will help you translate. Please set your default language with /setlang <language code>."
-        )
-    else:
-        update.message.reply_text(
-            f"Welcome back! Your default translation language is set to {user_config['language']}."
-        )
 
 def start_bot(updater):
     """Inicia el bot"""
@@ -51,11 +35,6 @@ def main() -> None:
 
         # Configura los manejadores
         setup_handlers(dispatcher)
-
-        # Añadir manejadores para menús y comandos
-        dispatcher.add_handler(CommandHandler("start", start))
-        dispatcher.add_handler(CallbackQueryHandler(handle_menu))
-        dispatcher.add_handler(CallbackQueryHandler(handle_language_settings, pattern='config_.*'))
 
         # Añadir manejador para detener el bot
         dispatcher.add_handler(CommandHandler("stop", lambda update, context: stop_bot(update, context, updater)))

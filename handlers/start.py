@@ -1,3 +1,6 @@
+from telegram import Update
+from telegram.ext import CallbackContext
+
 def start(update: Update, context: CallbackContext) -> None:
     user_id = update.message.from_user.id
     user_config = context.user_data.get('config')
