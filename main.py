@@ -6,7 +6,7 @@ from handlers.inith import setup_handlers
 
 # Habilita el registro
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levellevel)s - %(message)s', level=logging.INFO
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
@@ -15,8 +15,9 @@ def start_bot(updater):
     updater.start_polling()
     logger.info("Bot iniciado")
 
-def stop_bot(updater):
+def stop_bot(update, context, updater):
     """Detiene el bot"""
+    update.message.reply_text("Bot detenido. ¡Hasta luego!")
     updater.stop()
     updater.is_idle = False
     logger.info("Bot detenido")
@@ -36,7 +37,7 @@ def main() -> None:
         setup_handlers(dispatcher)
 
         # Añadir manejador para detener el bot
-        dispatcher.add_handler(CommandHandler("stop", lambda update, context: stop_bot(updater)))
+        dispatcher.add_handler(CommandHandler("stop", lambda update, context: stop_bot(update, context, updater)))
 
         start_bot(updater)
 
