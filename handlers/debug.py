@@ -3,7 +3,7 @@ from telegram.ext import CallbackContext
 import requests
 import os
 
-GITHUB_REPO = "KojieKO/tgtradutore"  # Reemplaza con tu usuario/repositorio
+GITHUB_REPO = os.getenv('REPO')  # Utiliza el secreto REPO
 GITHUB_TOKEN = os.getenv('GH_TOKEN')
 
 def cancel_workflow_run():

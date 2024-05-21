@@ -38,3 +38,4 @@ jobs:
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO: ${{ secrets.REPO }}
