@@ -6,7 +6,7 @@ import os
 GITHUB_REPO = os.getenv('REPO')
 GITHUB_TOKEN = os.getenv('GH_TOKEN')
 
-def set_stop_command_received():
+def cancel_workflow_run():
     url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/runs"
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
@@ -21,7 +21,8 @@ def set_stop_command_received():
                 cancel_url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/runs/{run_id}/cancel"
                 cancel_response = requests.post(cancel_url, headers=headers)
                 if cancel_response.status_code == 202:
-                    os.environ['STOP_COMMAND_RECEIVED'] = 'true'
+                    with open("stop_command_received.txt", "w") as f:
+                        f.write("true")
                     return True
                 else:
                     print(f"Error al cancelar el workflow {run_id}: {cancel_response.status_code}")
@@ -34,7 +35,7 @@ def debug_stop(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Bot detenido por emergencia. ¡Hasta luego!")
     context.bot_data['updater'].stop()
     context.bot_data['updater'].is_idle = False
-    if set_stop_command_received():
+    if cancel_workflow_run():
         update.message.reply_text("Workflow cancelado con éxito.")
     else:
         update.message.reply_text("No se pudo cancelar el workflow o no había ningún workflow en progreso.")

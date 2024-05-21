@@ -33,6 +33,7 @@ jobs:
           pip list
 
       - name: Run bot
+        id: run_bot
         run: |
           python main.py
         env:
@@ -40,8 +41,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           REPO: ${{ secrets.REPO }}
 
-      - name: Check for stop command and cancel workflow
-        if: ${{ env.STOP_COMMAND_RECEIVED == 'true' }}
+      - name: Check for stop command
+        if: always()
         run: |
-          echo "Stopping workflow as stop command was received."
-          exit 1
+          if [ -f "stop_command_received.txt" ]; then
+            echo "Stop command received, cancelling workflow."
+            exit 1
+          fi
