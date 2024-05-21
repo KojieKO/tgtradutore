@@ -20,7 +20,8 @@ def cancel_workflow_run():
                 run_id = workflow['id']
                 cancel_url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/runs/{run_id}/cancel"
                 cancel_response = requests.post(cancel_url, headers=headers)
-                return cancel_response.status_code == 202
+                if cancel_response.status_code == 202:
+                    return True
     return False
 
 def debug_stop(update: Update, context: CallbackContext) -> None:
