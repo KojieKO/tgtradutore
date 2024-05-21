@@ -13,6 +13,7 @@ def cancel_workflow_run():
         "Accept": "application/vnd.github.v3+json"
     }
     response = requests.get(url, headers=headers)
+    print(f"GET {url} - Status Code: {response.status_code}")
     if response.status_code == 200:
         workflows = response.json().get('workflow_runs', [])
         for workflow in workflows:
@@ -20,8 +21,14 @@ def cancel_workflow_run():
                 run_id = workflow['id']
                 cancel_url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/runs/{run_id}/cancel"
                 cancel_response = requests.post(cancel_url, headers=headers)
+                print(f"POST {cancel_url} - Status Code: {cancel_response.status_code}")
                 if cancel_response.status_code == 202:
+                    print(f"Workflow {run_id} cancelado con éxito.")
                     return True
+                else:
+                    print(f"Error al cancelar el workflow {run_id}: {cancel_response.status_code}")
+    else:
+        print(f"Error al obtener los workflows: {response.status_code}")
     return False
 
 def debug_stop(update: Update, context: CallbackContext) -> None:
