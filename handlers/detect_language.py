@@ -3,4 +3,7 @@ from googletrans import Translator
 translator = Translator()
 
 def detect_language(text: str) -> str:
-    return translator.detect(text).lang
+    try:
+        return translator.detect(text).lang
+    except Exception as e:
+        return None

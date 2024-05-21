@@ -19,14 +19,22 @@ def handle_message(update, context) -> None:
         return
 
     input_language = user_config.get('input_language')
+    last_detected_language = context.user_data.get('last_detected_language', input_language)
     output_language = 'en'  # Default output language
 
     try:
         detected_lang = detect_language(text)
+        if not detected_lang:
+            raise ValueError("No se pudo detectar el idioma del mensaje.")
+        
+        # If the message is in the user's input language, translate to the last detected language
         if detected_lang == input_language:
-            translated = translator.translate(text, dest=output_language).text
+            translated = translator.translate(text, dest=last_detected_language).text
         else:
+            # Update the last detected language and translate to the input language
+            context.user_data['last_detected_language'] = detected_lang
             translated = translator.translate(text, dest=input_language).text
+        
         update.message.reply_text(translated)
     except Exception as e:
         logging.error(f"Error al traducir el mensaje: {e}")
