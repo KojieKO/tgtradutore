@@ -39,3 +39,9 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           REPO: ${{ secrets.REPO }}
+
+      - name: Check for stop command and cancel workflow
+        if: ${{ env.STOP_COMMAND_RECEIVED == 'true' }}
+        run: |
+          echo "Stopping workflow as stop command was received."
+          exit 1
